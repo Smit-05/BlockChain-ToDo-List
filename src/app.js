@@ -1,11 +1,21 @@
+// import "./require";
 
+var print = console.log
+
+Web3 = require('web3')
 App = {
+
+  contracts: {},
+
   load: async () => {
     await App.loadWeb3()
     await App.loadAccount()
+    await App.loadContract()
+    await App.render()
   },
 
   loadWeb3: async () => {
+    
     if (typeof web3 !== 'undefined') {
       App.web3Provider = web3.currentProvider
       web3 = new Web3(web3.currentProvider)
@@ -40,8 +50,26 @@ App = {
   loadAccount: async () => {
     App.account = window.web3.eth.accounts[0]
     console.log(App.account)
-  }
+  },
 
+  loadContract: async () => {
+    const todoList = await $.getJSON('TodoList.json')
+    App.contracts.TodoList = TruffleContract(todoList)
+    App.contracts.TodoList.setProvider(App.web3Provider)
+    print(todoList)
+    App.todoList = await App.contracts.TodoList.deployed()
+  },
+
+  render: async () => {
+
+    if(App.loading){
+      return
+    }
+    App.setLoading(true)
+
+
+    $("#account").html(App.account)
+  }
 
 }
 
