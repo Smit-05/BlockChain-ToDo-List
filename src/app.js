@@ -49,7 +49,7 @@ App = {
 
   loadAccount: async () => {
     App.account = window.web3.eth.accounts[0]
-    console.log(App.account)
+    print(App.account)
   },
 
   loadContract: async () => {
@@ -57,6 +57,7 @@ App = {
     App.contracts.TodoList = TruffleContract(todoList)
     App.contracts.TodoList.setProvider(App.web3Provider)
     print(todoList)
+    print(App.todoList)
     App.todoList = await App.contracts.TodoList.deployed()
   },
 
