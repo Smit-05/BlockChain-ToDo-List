@@ -4,7 +4,7 @@ var print = console.log
 
 Web3 = require('web3')
 App = {
-
+  loading:false,
   contracts: {},
 
   load: async () => {
@@ -48,7 +48,7 @@ App = {
   },
 
   loadAccount: async () => {
-    App.account = window.web3.eth.accounts[0]
+    App.account = web3.eth.accounts[0]
     print(App.account)
   },
 
@@ -56,9 +56,9 @@ App = {
     const todoList = await $.getJSON('TodoList.json')
     App.contracts.TodoList = TruffleContract(todoList)
     App.contracts.TodoList.setProvider(App.web3Provider)
-    print(todoList)
-    print(App.todoList)
+    print(App.web3Provider)
     App.todoList = await App.contracts.TodoList.deployed()
+    print(App.todoList)
   },
 
   render: async () => {
@@ -70,6 +70,22 @@ App = {
 
 
     $("#account").html(App.account)
+
+    App.setLoading(false)
+  },
+
+
+  setLoading: (boolean) => {
+    App.loading = boolean
+    const loader = $('#loader')
+    const content = $('#content')
+    if (boolean) {
+      loader.show()
+      content.hide()
+    } else {
+      loader.hide()
+      content.show()
+    }
   }
 
 }
